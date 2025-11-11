@@ -1,0 +1,150 @@
+// File: presentation/views/onboarding/onboarding_screen_1.dart
+import 'package:flutter/material.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../widgets/onboarding/onboarding_button.dart';
+
+class OnboardingScreen1 extends StatelessWidget {
+  final VoidCallback onNext;
+  final VoidCallback onSkip;
+
+  const OnboardingScreen1({
+    super.key,
+    required this.onNext,
+    required this.onSkip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Container(
+      width: screenWidth,
+      height: screenHeight,
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Stack(
+        children: [
+          // Orange bottom section
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Container(
+              width: screenWidth,
+              height: screenHeight * 0.48,
+              decoration: const ShapeDecoration(
+                color: AppColors.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(32),
+                    topRight: Radius.circular(32),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Main illustration - Robot with phone
+          Positioned(
+            left: screenWidth * 0.1,
+            top: screenHeight * 0.3,
+            child: Container(
+              width: screenWidth * 0.8,
+              height: screenHeight * 0.35,
+              child: Image.asset(
+                'assets/images/onboarding/onboarding_1.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.chat_bubble_outline,
+                      size: 80,
+                      color: AppColors.primary,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          // Bottom buttons
+          Positioned(
+            left: screenWidth * 0.25,
+            bottom: 80,
+            child: Row(
+              children: [
+                OnboardingButton(
+                  text: AppStrings.skip,
+                  isOutlined: true,
+                  onTap: onSkip,
+                ),
+                const SizedBox(width: 16),
+                OnboardingButton(
+                  text: AppStrings.next,
+                  isOutlined: false,
+                  onTap: onNext,
+                ),
+              ],
+            ),
+          ),
+
+          // Title and description
+          Positioned(
+            left: screenWidth * 0.1,
+            top: screenHeight * 0.08,
+            child: SizedBox(
+              width: screenWidth * 0.8,
+              child: Column(
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: AppStrings.onboarding1Title,
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 28,
+                            fontFamily: 'Space Grotesk',
+                            fontWeight: FontWeight.w400,
+                            height: 1.1,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: 'Aloulou',
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 28,
+                            fontFamily: 'Space Grotesk',
+                            fontWeight: FontWeight.w300,
+                            height: 1.1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    AppStrings.onboarding1Subtitle,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 14,
+                      fontFamily: 'Space Grotesk',
+                      fontWeight: FontWeight.w400,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

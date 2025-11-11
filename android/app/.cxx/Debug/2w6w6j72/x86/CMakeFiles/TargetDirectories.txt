@@ -1,0 +1,2 @@
+C:/Users/seife/OneDrive/Documents/project/ChatFlutter/android/app/.cxx/Debug/2w6w6j72/x86/CMakeFiles/edit_cache.dir
+C:/Users/seife/OneDrive/Documents/project/ChatFlutter/android/app/.cxx/Debug/2w6w6j72/x86/CMakeFiles/rebuild_cache.dir
