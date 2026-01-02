@@ -48,7 +48,7 @@ class OnboardingScreen1 extends StatelessWidget {
           Positioned(
             left: screenWidth * 0.1,
             top: screenHeight * 0.3,
-            child: Container(
+            child: SizedBox(
               width: screenWidth * 0.8,
               height: screenHeight * 0.35,
               child: Image.asset(
@@ -98,14 +98,14 @@ class OnboardingScreen1 extends StatelessWidget {
             top: screenHeight * 0.08,
             child: SizedBox(
               width: screenWidth * 0.8,
-              child: Column(
+              child: const Column(
                 children: [
                   Text.rich(
                     TextSpan(
                       children: [
                         TextSpan(
                           text: AppStrings.onboarding1Title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 28,
                             fontFamily: 'Space Grotesk',
@@ -113,7 +113,7 @@ class OnboardingScreen1 extends StatelessWidget {
                             height: 1.1,
                           ),
                         ),
-                        const TextSpan(
+                        TextSpan(
                           text: 'Aloulou',
                           style: TextStyle(
                             color: AppColors.textPrimary,
@@ -127,11 +127,11 @@ class OnboardingScreen1 extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Text(
                     AppStrings.onboarding1Subtitle,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 14,
                       fontFamily: 'Space Grotesk',

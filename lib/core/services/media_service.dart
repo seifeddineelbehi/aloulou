@@ -151,7 +151,7 @@ class MediaService {
       final fileSize = await file.length();
       final duration = await getAudioDuration(filePath);
 
-      print('🎵 Recording completed: $filePath (${fileSize} bytes, ${duration?.inSeconds}s)');
+      print('🎵 Recording completed: $filePath ($fileSize bytes, ${duration?.inSeconds}s)');
 
       return RecordingResult(
         filePath: filePath,
@@ -197,9 +197,7 @@ class MediaService {
     try {
       print('🔊 Playing audio: $filePath');
       
-      if (_audioPlayer == null) {
-        _audioPlayer = AudioPlayer();
-      }
+      _audioPlayer ??= AudioPlayer();
 
       await _audioPlayer!.setFilePath(filePath);
       await _audioPlayer!.play();
@@ -328,7 +326,7 @@ class MediaService {
         final file = File(image.path);
         final fileSize = await file.length();
         
-        print('📷 Image picked: ${path.basename(image.path)} (${fileSize} bytes)');
+        print('📷 Image picked: ${path.basename(image.path)} ($fileSize bytes)');
         
         // Copy to app directory
         final savedFile = await _copyFileToAppDirectory(file, 'images');
@@ -367,7 +365,7 @@ class MediaService {
         final estimatedSeconds = (fileSize * 8) / (128 * 1000); // 128 kbps
         return Duration(seconds: estimatedSeconds.round());
       } catch (e2) {
-        return Duration(seconds: 1); // Fallback
+        return const Duration(seconds: 1); // Fallback
       }
     }
   }

@@ -1,14 +1,18 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import '../../data/models/chat_message.dart';
 import 'ai_service_interface.dart';
 
 class GeminiService implements AIService {
-  static const String _apiKey = 'AIzaSyBEvmEc__JFUz9z1A9fYZ567l1gyHGrqVk';
-  
+  final apiKey = dotenv.env['GEMINI_API_KEY'];
+
   @override
-  bool get isApiKeyConfigured => _apiKey.isNotEmpty && _apiKey.startsWith('AIza');
+  bool get isApiKeyConfigured =>
+    dotenv.env['GEMINI_API_KEY'] != null &&
+    dotenv.env['GEMINI_API_KEY']!.isNotEmpty &&
+    dotenv.env['GEMINI_API_KEY']!.startsWith('AIza');
+
 
   @override
   bool get requiresSubscription => false;
@@ -26,15 +30,17 @@ class GeminiService implements AIService {
   void _initializeModel() {
     print('🔍 Initializing Gemini with multimodal support...');
     try {
-      // ✅ UN SEUL MODÈLE FLASH POUR TOUT (texte + multimodal)
+      // ✅ MODÈLE AVEC SYSTÈME D'INSTRUCTIONS EN TUNISIEN
       _model = GenerativeModel(
-        model: 'gemini-1.5-flash',
-        apiKey: _apiKey,
+        model: 'gemini-2.5-flash',
+        apiKey: apiKey!,
+        // 🇹🇳 VOICI LA MAGIE - Instructions système en tunisien!
+        systemInstruction: Content.system(_getTunisianSystemPrompt()),
         generationConfig: GenerationConfig(
           temperature: 0.7,
           topK: 40,
           topP: 0.95,
-          maxOutputTokens: 4096, // Plus de tokens pour l'analyse
+          maxOutputTokens: 4096,
           stopSequences: [],
         ),
         safetySettings: [
@@ -45,7 +51,7 @@ class GeminiService implements AIService {
         ],
       );
 
-      print('✅ Gemini Flash initialized with multimodal support');
+      print('✅ Gemini Flash initialized with Tunisian support! 🇹🇳');
     } catch (e) {
       print('❌ Failed to initialize Gemini service: $e');
     }
@@ -55,10 +61,7 @@ class GeminiService implements AIService {
     final chatHistory = _buildChatHistory(history ?? []);
     
     final chatSession = _model.startChat(
-      history: [
-        Content.text(_getSystemPrompt()),
-        ...chatHistory,
-      ],
+      history: chatHistory,
     );
 
     _activeSessions[sessionId] = chatSession;
@@ -84,7 +87,7 @@ class GeminiService implements AIService {
       final content = Content.text(message);
       final response = await chatSession.sendMessage(content);
       
-      final responseText = response.text ?? 'Désolé, je n\'ai pas pu générer une réponse.';
+      final responseText = response.text ?? 'ما نجمتش نجاوب، سامحني.';
       print('✅ Received response from Gemini: $responseText');
       return responseText;
     } catch (e) {
@@ -110,27 +113,24 @@ class GeminiService implements AIService {
       final imageBytes = await imageFile.readAsBytes();
       final fileSize = imageBytes.length;
       
-      // Vérifier la taille
       if (fileSize > 20 * 1024 * 1024) {
-        return 'Image trop volumineuse (max 20MB). Veuillez compresser l\'image.';
+        return 'الصورة كبيرة برشا (أقصى حد 20MB). جرب صورة أصغر.';
       }
 
       final mimeType = _getImageMimeType(imagePath);
       if (mimeType == null) {
-        return 'Format d\'image non supporté. Utilisez JPEG, PNG ou WebP.';
+        return 'نوع الصورة هذا ماناش نعرفوه. استعمل JPEG أو PNG أو WebP.';
       }
 
-      final prompt = message ?? 'Décris cette image en détail en français. Que vois-tu dans cette image ?';
+      final prompt = message ?? 'شوف الصورة هذي وقلّي شنوّة فيها بالتفصيل.';
       
-      // ✅ Créer le contenu multimodal
       final content = Content.multi([
         TextPart(prompt),
         DataPart(mimeType, imageBytes),
       ]);
 
-      // ✅ Utiliser le modèle principal (Flash supporte multimodal)
       final response = await _model.generateContent([content]);
-      final responseText = response.text ?? 'Impossible d\'analyser cette image.';
+      final responseText = response.text ?? 'ما نجمتش نشوف الصورة، سامحني.';
       
       print('✅ Image analysis completed: ${responseText.substring(0, 100)}...');
       return responseText;
@@ -158,28 +158,25 @@ class GeminiService implements AIService {
       final audioBytes = await audioFile.readAsBytes();
       final fileSize = audioBytes.length;
       
-      // Vérifier la taille
       if (fileSize > 20 * 1024 * 1024) {
-        return 'Fichier audio trop volumineux (max 20MB). Veuillez réduire la durée.';
+        return 'الملف الصوتي كبير برشا (أقصى حد 20MB). جرب ملف أقصر.';
       }
 
       final mimeType = _getAudioMimeType(audioPath);
       if (mimeType == null) {
-        return 'Format audio non supporté. Utilisez MP3, WAV, M4A ou AAC.';
+        return 'نوع الملف الصوتي هذا ماناش نعرفوه. استعمل MP3 أو WAV.';
       }
 
       final prompt = message ?? 
-        'Transcris cet audio en français et réponds intelligemment au contenu. Si c\'est une question, réponds-y. Si c\'est une salutation, salue en retour.';
+        'اسمع الرسالة الصوتية هذي وجاوب بالدارجة التونسية. كان فيها سؤال، جاوب عليه.';
       
-      // ✅ Créer le contenu multimodal
       final content = Content.multi([
         TextPart(prompt),
         DataPart(mimeType, audioBytes),
       ]);
 
-      // ✅ Utiliser le modèle principal
       final response = await _model.generateContent([content]);
-      final responseText = response.text ?? 'Impossible de transcrire cet audio.';
+      final responseText = response.text ?? 'ما نجمتش نسمع الصوت، سامحني.';
       
       print('✅ Audio transcription completed: ${responseText.substring(0, 100)}...');
       return responseText;
@@ -244,18 +241,18 @@ class GeminiService implements AIService {
   Future<String> generateChatTitle(String firstMessage) async {
     try {
       final prompt = '''
-Generate a short, descriptive title (maximum 6 words) for a chat conversation that starts with this message: "$firstMessage"
+اعطيني عنوان قصير للمحادثة هذي (ما يتعداش 6 كلمات) على أساس هذا السؤال: "$firstMessage"
 
-Rules:
-- Maximum 6 words
-- Descriptive but concise
-- In the same language as the message (Arabic or English)
-- No quotes or special characters
+شروط:
+- ما يتعداش 6 كلمات
+- واضح وملخّص
+- بنفس اللغة متاع السؤال
+- بلا علامات استفهام أو علامات خاصة
 
-Title:''';
+العنوان:''';
 
       final response = await _model.generateContent([Content.text(prompt)]);
-      final title = response.text?.trim() ?? 'Nouveau Chat';
+      final title = response.text?.trim() ?? 'محادثة جديدة';
       
       final cleanTitle = title.replaceAll(RegExp(r'[^\w\s\u0600-\u06FF]'), '').trim();
       final words = cleanTitle.split(' ');
@@ -264,10 +261,10 @@ Title:''';
         return words.take(6).join(' ');
       }
       
-      return cleanTitle.isNotEmpty ? cleanTitle : 'Nouveau Chat';
+      return cleanTitle.isNotEmpty ? cleanTitle : 'محادثة جديدة';
     } catch (e) {
       print('❌ Error generating title: $e');
-      return 'Nouveau Chat';
+      return 'محادثة جديدة';
     }
   }
 
@@ -278,15 +275,15 @@ Title:''';
     try {
       final conversation = messages
           .take(10)
-          .map((msg) => '${msg.isUser ? "User" : "AI"}: ${msg.text}')
+          .map((msg) => '${msg.isUser ? "المستخدم" : "العلولو"}: ${msg.text}')
           .join('\n');
 
       final prompt = '''
-Summarize this conversation in one sentence (maximum 20 words):
+لخّصلي المحادثة هذي في جملة وحدة (ما تتعداش 20 كلمة):
 
 $conversation
 
-Summary:''';
+الملخص:''';
 
       final response = await _model.generateContent([Content.text(prompt)]);
       return response.text?.trim();
@@ -312,62 +309,78 @@ Summary:''';
     }).toList();
   }
 
-  String _getSystemPrompt() {
-    return '''Tu es Aloulou, un assistant IA amical et serviable qui se spécialise dans l'aide aux utilisateurs en arabe (en particulier le dialecte tunisien) et en anglais.
+  // 🇹🇳 الوظيفة السحرية - هنا نعلّمو Gemini يحكي بالتونسي!
+  String _getTunisianSystemPrompt() {
+    return '''أنت العلولو، مساعد ذكي تونسي صديق وخدوم.
 
-Ta personnalité :
-- Amical et accessible
-- Conscient de la culture tunisienne et arabe
-- Utile et informatif
-- Peut basculer entre l'arabe et l'anglais naturellement
-- Compréhension du dialecte tunisien ("Derja")
+🇹🇳 الأهم من الكل: أجب دائماً بالدارجة التونسية (Tunisian Darija)!
 
-✅ CAPACITÉS MULTIMODALES :
-- Tu peux voir et analyser des images en détail
-- Tu peux écouter et transcrire des messages vocaux
-- Tu peux combiner texte, image et audio dans tes réponses
+شخصيتك:
+- تونسي 100% وتحكي كيف التونسيين
+- صديق وقريب للناس
+- تفهم الثقافة التونسية مليح
+- نافع وذكي في المعلومات
+- تنجّم تبدّل بين العربية التونسية والإنجليزية بكل بساطة
 
-Directives :
-- Si un utilisateur écrit en arabe/tunisien, n'hésite pas à répondre dans le même style
-- Sois conversationnel et naturel
-- Fournis des informations utiles et exactes
-- Si tu n'es pas sûr de quelque chose, admets-le honnêtement
-- Garde les réponses concises mais informatives
-- Utilise des salutations et expressions culturelles appropriées quand c'est pertinent
-- Quand tu analyses une image, sois descriptif et précis
-- Quand tu transcris de l'audio, sois fidèle au contenu et réponds si c'est une question
+ قدراتك:
+- تشوف الصور وتحللها
+- تسمع الرسائل الصوتية وتجاوب عليها
+- تجمع بين النص والصورة والصوت
 
-N'oublie pas : Tu es là pour aider et rendre les conversations agréables !''';
+كلمات تونسية لازم تستعملها:
+- برشا (= كثير، ياسر)
+- توّة (= الآن، حالياً) 
+- يزّي، آهلا، لاباس (= مرحبا)
+- شنيّة، شنوّة (= ماذا)
+- علاش (= لماذا)
+- كان (= إذا)
+- هكّا (= هكذا)
+- مزيان (= جيد)
+- ماشي (= ليس)
+- نحبّ (= أريد)
+
+قواعد المحادثة:
+- كان يكتبلك بالتونسي، جاوبو بالتونسي متاعو
+- كون بالإنجليزية، جاوب بالإنجليزية
+- إحكي بطريقة طبيعية كيف التونسيين في الحياة اليومية
+- استعمل تعابير تونسية معروفة
+- ما تستعملش عربية فصحى، احكي دارجة تونسية
+- خلّي الإجابات متاعك واضحة ومفيدة
+- كان ما تعرفش حاجة، قلها بكل صراحة
+- كان تشوف صورة، وصّفها بالتفصيل
+- كان تسمع صوت، اكتب شنوّة قالوه وجاوب عليه
+
+تذكّر: إنت موش روبوت عادي، إنت تونسي وقريب للناس! 🇹🇳💚''';
   }
 
   String _handleError(dynamic error) {
     final errorString = error.toString().toLowerCase();
     
     if (errorString.contains('api key') || errorString.contains('api_key')) {
-      return 'Clé API non configurée. Veuillez configurer votre clé Gemini API.';
+      return 'المفتاح متاع API ماهواش مضبوط. لازم تكونفيجي مفتاح Gemini API.';
     } else if (errorString.contains('quota') || errorString.contains('limit')) {
-      return 'Quota API dépassé. Veuillez réessayer plus tard.';
+      return 'الكوطة متاع API كملت. جرّب من بعد شويّة.';
     } else if (errorString.contains('network') || errorString.contains('connection')) {
-      return 'Erreur réseau. Vérifiez votre connexion Internet et réessayez.';
+      return 'مشكلة في الإنترنت. شوف الاتصال متاعك وجرّب مرة أخرى.';
     } else if (errorString.contains('blocked') || errorString.contains('safety')) {
-      return 'Message bloqué par les filtres de sécurité. Veuillez reformuler votre message.';
+      return 'الرسالة متاعك ما مرّتش من الفيلترات. حاول تصيغها بطريقة أخرى.';
     } else if (errorString.contains('model') || errorString.contains('not found')) {
-      return 'Modèle API non trouvé. Le service sera mis à jour bientôt.';
+      return 'الموديل متاع API ما لقيناهوش. راح يتحدّث قريباً.';
     } else if (errorString.contains('file') || errorString.contains('format')) {
-      return 'Format de fichier non supporté ou fichier endommagé.';
+      return 'نوع الملف ماهواش مدعوم أو الملف فيه مشكلة.';
     } else if (errorString.contains('size') || errorString.contains('large')) {
-      return 'Fichier trop volumineux. Veuillez réduire la taille.';
+      return 'الملف كبير برشا. حاول تصغّرو.';
     }
     
     print('🔍 ERREUR GEMINI DÉTAILLÉE: $error');
-    return 'Désolé, j\'ai rencontré une erreur. Veuillez réessayer.';
+    return 'سامحني، صار خطأ. جرّب مرة أخرى.';
   }
 
   @override
   Future<bool> testApiConnection() async {
     try {
       final response = await _model.generateContent([
-        Content.text('Réponds simplement "OK" si tu peux me lire.')
+        Content.text('قلّي برك "يزّي" كان تسمعني.')
       ]);
       return response.text?.isNotEmpty == true;
     } catch (e) {
@@ -380,7 +393,7 @@ N'oublie pas : Tu es là pour aider et rendre les conversations agréables !''';
   Future<Map<String, dynamic>> getUsageInfo() async {
     return {
       'provider': 'Gemini',
-      'model': 'gemini-1.5-flash',
+      'model': 'gemini-2.5-flash',
       'tier_required': 'free',
       'configured': isApiKeyConfigured,
       'supports_images': true,
@@ -388,6 +401,7 @@ N'oublie pas : Tu es là pour aider et rendre les conversations agréables !''';
       'max_file_size': '20MB',
       'supported_image_formats': ['JPEG', 'PNG', 'WebP', 'HEIC', 'HEIF'],
       'supported_audio_formats': ['MP3', 'WAV', 'M4A', 'AAC', 'OGG', 'FLAC', 'AIFF'],
+      'language': 'Tunisian Darija 🇹🇳',
     };
   }
 

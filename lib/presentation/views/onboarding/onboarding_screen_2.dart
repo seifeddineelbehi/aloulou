@@ -1,4 +1,3 @@
-// File: presentation/views/onboarding/onboarding_screen_2.dart
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
@@ -48,7 +47,7 @@ class OnboardingScreen2 extends StatelessWidget {
           Positioned(
             left: screenWidth * 0.1,
             top: screenHeight * 0.28,
-            child: Container(
+            child: SizedBox(
               width: screenWidth * 0.8,
               height: screenHeight * 0.38,
               child: Image.asset(
@@ -98,9 +97,9 @@ class OnboardingScreen2 extends StatelessWidget {
             top: screenHeight * 0.08,
             child: SizedBox(
               width: screenWidth * 0.9,
-              child: Column(
+              child: const Column(
                 children: [
-                  const Text(
+                  Text(
                     AppStrings.onboarding2Title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -111,8 +110,8 @@ class OnboardingScreen2 extends StatelessWidget {
                       height: 1.1,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  SizedBox(height: 16),
+                  Text(
                     AppStrings.onboarding2Subtitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(

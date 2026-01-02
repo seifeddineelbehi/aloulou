@@ -631,7 +631,7 @@ extension MessageInputExtension on MessageInput {
     required VoidCallback onShowMediaOptions,
     required bool isComposing,
     required bool isSending,
-    bool canSendMessage = true,
+    bool canSendMessage = true
   }) {
     return MessageInput(
       controller: controller,

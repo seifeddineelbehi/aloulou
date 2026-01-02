@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../../../../data/models/chat_message.dart';
 import '../../../../core/utils/file_utils.dart';
 import '../message_animations.dart';

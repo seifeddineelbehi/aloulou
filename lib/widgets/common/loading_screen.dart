@@ -168,7 +168,7 @@ class _LoadingScreenState extends State<LoadingScreen>
   }
 
   Widget _buildLoadingIndicator() {
-    return SizedBox(
+    return const SizedBox(
       width: 40,
       height: 40,
       child: CircularProgressIndicator(

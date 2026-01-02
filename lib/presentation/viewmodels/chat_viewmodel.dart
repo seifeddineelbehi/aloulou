@@ -59,14 +59,12 @@ class ChatViewModel extends ChangeNotifier {
   // Initialize with user ID
   void initialize(String userId) {
     _currentUserId = userId;
-    if (_userRepository == null) {
-      _userRepository = UserRepository();
-    }
+    _userRepository ??= UserRepository();
   }
 
   // Create new chat session
   Future<void> createNewSession() async {
-    if (_currentUserId == null) return;
+    if (_currentUserId == null) return; 
 
     _setLoading(true);
     try {
@@ -146,9 +144,17 @@ class ChatViewModel extends ChangeNotifier {
       type: MessageType.text,
     );
     
-    _messages.add(userMessage);
+   _messages.add(userMessage);
+    _chatRepository.sendMessage(
+      userId: userMessage.isUser ? _currentUserId! : 'AI',
+      sessionId: userMessage.sessionId,
+      text: userMessage.text,
+      chatHistory: userMessage.isUser
+          ? _messages.where((m) => m.id != userMessage.id).toList()
+          : [],
+    );
     notifyListeners();
-
+    
     try {
       // ✅ Utiliser directement le GeminiService
       final aiResponseText = await _geminiService.sendMessage(
@@ -172,7 +178,17 @@ class ChatViewModel extends ChangeNotifier {
         status: MessageStatus.sent,
         type: MessageType.text,
       );
+      
       _messages.add(aiMessage);
+    _chatRepository.sendMessage(
+      userId: aiMessage.isUser ? _currentUserId! : 'AI',
+      sessionId: aiMessage.sessionId,
+      text: aiMessage.text,
+      chatHistory: aiMessage.isUser
+          ? _messages.where((m) => m.id != aiMessage.id).toList()
+          : [],
+    );
+    notifyListeners();
 
       // Update user stats
       await _updateUserStats();

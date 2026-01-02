@@ -22,7 +22,7 @@ class ChatHistoryViewModel extends ChangeNotifier {
   String? _currentUserId;
   String _searchQuery = '';
   List<ChatSession> _filteredSessions = [];
-  Map<String, List<ChatMessage>> _sessionMessages = {};
+  final Map<String, List<ChatMessage>> _sessionMessages = {};
 
   // Getters
   List<ChatSession> get sessions => _searchQuery.isEmpty ? _sessions : _filteredSessions;

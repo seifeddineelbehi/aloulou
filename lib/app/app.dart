@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-
 import '../core/constants/app_colors.dart';
 import '../widgets/common/app_theme.dart';
 import '../presentation/viewmodels/auth_viewmodel.dart';
@@ -130,7 +129,7 @@ class AloulouApp extends StatelessWidget {
             // You can create a settings screen or redirect to profile
             return const ProfileScreen();
           },
-          routes: [
+          routes: const [
             // GoRoute(
             //   path: 'subscription',
             //   builder: (context, state) {

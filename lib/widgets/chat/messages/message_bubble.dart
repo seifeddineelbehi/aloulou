@@ -1,9 +1,6 @@
 // message_bubble.dart
-import 'dart:io';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../data/models/chat_message.dart';
 import 'message_avatar.dart';
 import 'message_content.dart';

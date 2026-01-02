@@ -1,7 +1,6 @@
 // File: core/services/ai_config_service.dart
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ai_service_interface.dart';
-import 'ai_service_manager.dart';
 
 class AIConfigService {
   static const String _keyGeminiApiKey = 'gemini_api_key';

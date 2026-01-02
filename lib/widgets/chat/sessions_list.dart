@@ -1,6 +1,5 @@
   import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../widgets/chat/session_card.dart';
 import '../../../../widgets/common/empty_state.dart';
 import 'animated_session_card.dart';
 

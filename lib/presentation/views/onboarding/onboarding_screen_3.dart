@@ -46,7 +46,7 @@ class OnboardingScreen3 extends StatelessWidget {
           Positioned(
             left: screenWidth * 0.1,
             top: screenHeight * 0.28,
-            child: Container(
+            child: SizedBox(
               width: screenWidth * 0.8,
               height: screenHeight * 0.38,
               child: Image.asset(
@@ -90,9 +90,9 @@ class OnboardingScreen3 extends StatelessWidget {
             top: screenHeight * 0.08,
             child: SizedBox(
               width: screenWidth * 0.9,
-              child: Column(
+              child: const Column(
                 children: [
-                  const Text(
+                  Text(
                     AppStrings.onboarding3Title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -103,8 +103,8 @@ class OnboardingScreen3 extends StatelessWidget {
                       height: 1.1,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  SizedBox(height: 16),
+                  Text(
                     AppStrings.onboarding3Subtitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(

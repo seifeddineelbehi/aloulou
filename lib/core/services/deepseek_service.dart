@@ -1,15 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../../data/models/chat_message.dart';
 import 'ai_service_interface.dart';
 
 class DeepSeekService implements AIService {
-  static const String _apiKey = 'sk-ec4c527510cc41fd91ebf0bab1796171';
-  static const String _baseUrl = 'https://api.deepseek.com/v1';
+  final apiKey = dotenv.env['GEMINI_API_KEY'];
+  final _baseUrl = dotenv.env['BASEDE_URL'] ;
+
     
   @override
-  bool get isApiKeyConfigured => _apiKey.isNotEmpty && _apiKey.startsWith('sk-');
+   bool get isApiKeyConfigured =>
+    dotenv.env['GEMINI_API_KEY'] != null &&
+    dotenv.env['GEMINI_API_KEY']!.isNotEmpty &&
+    dotenv.env['GEMINI_API_KEY']!.startsWith('sk-');
 
   @override
   bool get requiresSubscription => false; // DeepSeek est gratuit
@@ -88,11 +93,12 @@ class DeepSeekService implements AIService {
 
   Future<String?> _makeApiRequest(List<Map<String, dynamic>> messages) async {
     try {
+      print('deeeeeeeeeeeeeeeeeeeeepseeeeekkkkk');
       final response = await http.post(
         Uri.parse('$_baseUrl/chat/completions'),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $_apiKey',
+          'Authorization': 'Bearer $apiKey',
         },
         body: jsonEncode({
           'model': 'deepseek-chat',

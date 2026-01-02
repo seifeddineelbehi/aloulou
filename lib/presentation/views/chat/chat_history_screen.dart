@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../viewmodels/chat_history_viewmodel.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../../widgets/chat/chat_history_app_bar.dart';
@@ -11,7 +10,6 @@ import '../../../widgets/chat/search_section.dart';
 import '../../../widgets/chat/time_filter_tabs.dart';
 import '../../../widgets/chat/sessions_content.dart';
 import '../../../widgets/chat/new_chat_fab.dart';
-import '../../../widgets/common/page_transitions.dart';
 import '../../../core/utils/session_actions.dart';
 import '../../../core/utils/snackbar_utils.dart';
 

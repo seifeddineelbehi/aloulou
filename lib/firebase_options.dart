@@ -22,13 +22,7 @@ class DefaultFirebaseOptions {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
-      case TargetPlatform.iOS:
-        return ios;
-      case TargetPlatform.macOS:
-        return macos;
-      case TargetPlatform.windows:
-        return windows;
-      case TargetPlatform.linux:
+     
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
           'you can reconfigure this by running the FlutterFire CLI again.',
@@ -57,32 +51,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'aloulou-chatbot.firebasestorage.app',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyChnm8znwpzqRPB15Unk8budiMKhZqmu3g',
-    appId: '1:739591056554:ios:aa8db8eb899f7407cc34d3',
-    messagingSenderId: '739591056554',
-    projectId: 'aloulou-chatbot',
-    storageBucket: 'aloulou-chatbot.firebasestorage.app',
-    iosClientId: '739591056554-022p0l6m1l2i4usr2umgbipfjpkehu6m.apps.googleusercontent.com',
-    iosBundleId: 'com.example.chatFlutter',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyChnm8znwpzqRPB15Unk8budiMKhZqmu3g',
-    appId: '1:739591056554:ios:aa8db8eb899f7407cc34d3',
-    messagingSenderId: '739591056554',
-    projectId: 'aloulou-chatbot',
-    storageBucket: 'aloulou-chatbot.firebasestorage.app',
-    iosClientId: '739591056554-022p0l6m1l2i4usr2umgbipfjpkehu6m.apps.googleusercontent.com',
-    iosBundleId: 'com.example.chatFlutter',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCm3Zt9GlU3yWAxXA3OAJf0i4vvJi6EeTI',
-    appId: '1:739591056554:web:237b69c7060b9b16cc34d3',
-    messagingSenderId: '739591056554',
-    projectId: 'aloulou-chatbot',
-    authDomain: 'aloulou-chatbot.firebaseapp.com',
-    storageBucket: 'aloulou-chatbot.firebasestorage.app',
-  );
+  
 }

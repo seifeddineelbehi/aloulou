@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../presentation/viewmodels/chat_history_viewmodel.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../widgets/common/empty_state.dart';
 import '../../../../widgets/common/error_widget.dart';
 import 'sessions_list.dart';
 

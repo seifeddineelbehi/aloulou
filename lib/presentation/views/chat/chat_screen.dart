@@ -281,11 +281,11 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
       context: context,
       barrierColor: Colors.black26,
       builder: (context) => AlertDialog(
-        title: Row(
+        title: const Row(
           children: [
             Icon(Icons.add_circle_outline, color: AppColors.primary),
-            const SizedBox(width: 12),
-            const Text('Nouvelle conversation'),
+            SizedBox(width: 12),
+            Text('Nouvelle conversation'),
           ],
         ),
         content: const Text(
@@ -408,7 +408,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
                   ),
                   if (chatViewModel.isSending) ...[
                     const SizedBox(width: 8),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                       height: 12,
                       child: CircularProgressIndicator(
@@ -665,7 +665,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.white, size: 20),
+            const Icon(Icons.check_circle, color: Colors.white, size: 20),
             const SizedBox(width: 8),
             Text('Modèle changé vers $providerName'),
           ],
@@ -753,7 +753,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
           ),
         ),
         trailing: isSelected 
-            ? Icon(Icons.check_circle, color: AppColors.primary)
+            ? const Icon(Icons.check_circle, color: AppColors.primary)
             : Icon(Icons.circle_outlined, color: Colors.grey[400]),
         onTap: onTap,
       ),
@@ -828,7 +828,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
+          const CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
           const SizedBox(height: 16),
@@ -857,7 +857,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
                 color: AppColors.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.chat_bubble_outline,
                 size: 64,
                 color: AppColors.primary,
@@ -1125,7 +1125,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
                             onChanged: (value) {
                               // Implement theme switching
                             },
-                            activeColor: AppColors.primary,
+                            activeThumbColor: AppColors.primary,
                           ),
                         ),
                         _buildSettingsTile(
@@ -1154,7 +1154,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
                             onChanged: (value) {
                               // Implement haptic settings
                             },
-                            activeColor: AppColors.primary,
+                            activeThumbColor: AppColors.primary,
                           ),
                         ),
                         _buildSettingsTile(
@@ -1166,7 +1166,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
                             onChanged: (value) {
                               // Implement auto suggestions settings
                             },
-                            activeColor: AppColors.primary,
+                            activeThumbColor: AppColors.primary,
                           ),
                         ),
                       ],
@@ -1454,7 +1454,7 @@ _scrollController.jumpTo(_scrollController.position.maxScrollExtent);      }
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.download, color: Colors.white, size: 20),
+            const Icon(Icons.download, color: Colors.white, size: 20),
             const SizedBox(width: 8),
             Text('Export en format $format en cours...'),
           ],

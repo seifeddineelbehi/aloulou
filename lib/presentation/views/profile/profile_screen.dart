@@ -165,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               CircleAvatar(
                 radius: 50,
                 backgroundColor: AppColors.primary.withOpacity(0.1),
-                child: Icon(
+                child: const Icon(
                   Icons.person,
                   size: 50,
                   color: AppColors.primary,
@@ -433,7 +433,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 // Mettre à jour l'état
               });
             },
-            activeColor: AppColors.primary,
+            activeThumbColor: AppColors.primary,
           )
         : const Icon(
             Icons.chevron_right,

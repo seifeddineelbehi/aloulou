@@ -1,5 +1,4 @@
 // File: data/repositories/chat_repository.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/services/ai_service_interface.dart';
 import '../../core/services/firebase_service.dart';
 import '../../core/services/ai_service_manager.dart'; // ✅ CHANGÉ: Import du nouveau service manager

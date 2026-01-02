@@ -52,8 +52,8 @@ class AIServiceManager extends ChangeNotifier implements AIService {
     if (_currentProvider != provider) {
       _currentProvider = provider;
       notifyListeners();
-      print('🔄 Switched to ${currentProviderName} provider');
-    }
+      print('🔄 Switched to $currentProviderName provider');
+    } 
   }
 
   Future<Map<AIProvider, bool>> getAvailableProviders() async {
@@ -88,7 +88,7 @@ class AIServiceManager extends ChangeNotifier implements AIService {
       print('⚠️ No AI providers available');
     }
   }
-
+  
   @override
   Future<String> sendMessage({
     required String message,
@@ -102,7 +102,7 @@ class AIServiceManager extends ChangeNotifier implements AIService {
         chatHistory: chatHistory,
       );
     } catch (e) {
-      print('❌ ${currentProviderName} failed, trying fallback...');
+      print('❌$currentProviderName failed, trying fallback...');
       return await _tryFallback(message, sessionId, chatHistory);
     }
   }

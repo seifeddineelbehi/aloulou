@@ -36,8 +36,8 @@ class TermsCheckbox extends StatelessWidget {
                 fontSize: 14,
                 fontFamily: 'Space Grotesk',
               ),
-              children: [
-                const TextSpan(text: 'J\'accepte les '),
+              children: const [
+                TextSpan(text: 'J\'accepte les '),
                 TextSpan(
                   text: 'conditions d\'utilisation',
                   style: TextStyle(
@@ -46,7 +46,7 @@ class TermsCheckbox extends StatelessWidget {
                     decoration: TextDecoration.underline,
                   ),
                 ),
-                const TextSpan(text: ' et la '),
+                TextSpan(text: ' et la '),
                 TextSpan(
                   text: 'politique de confidentialité',
                   style: TextStyle(

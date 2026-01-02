@@ -6,7 +6,7 @@ import '../../core/services/ai_service_interface.dart';
 import '../../core/services/ai_service_manager.dart';
 
 class AIStatusIndicator extends StatelessWidget {
-  const AIStatusIndicator({Key? key}) : super(key: key);
+  const AIStatusIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
